@@ -1,74 +1,58 @@
 package com.galopocoma.raspberrycontrollerapp.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.galopocoma.raspberrycontrollerapp.components.GeneralButton
-import com.galopocoma.raspberrycontrollerapp.components.MainTopBar
+import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
-import com.galopocoma.raspberrycontrollerapp.controllers.ServiceStatusCallback
-import com.galopocoma.raspberrycontrollerapp.models.StatsStatus
-import kotlinx.coroutines.launch
+import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallback
+import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 
 @Composable
 fun StatsContent() {
-    val showDialog = remember { mutableStateOf(false) }
-    val dialogMessage = remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
+    val controller = RaspberryPiController()
+    val minidlna = remember { mutableStateOf(false) }
+    val transmission = remember { mutableStateOf(false) }
 
-    if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showDialog.value = false },
-            title = { Text(text = "Estado del Servicio") },
-            text = { Text(text = dialogMessage.value) },
-            confirmButton = {
-                Button(onClick = { showDialog.value = false }, shape = RoundedCornerShape(4.dp)) {
-                    Text("OK")
-                }
+    LaunchedEffect(key1 = minidlna) {
+        controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
+            override fun onSuccess(serviceStatus: MinidlnaStatus?) {
+                minidlna.value = serviceStatus?.active ?: false
             }
-        )
+
+            override fun onError(message: String) {
+                minidlna.value = false
+            }
+        })
+        controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
+            override fun onSuccess(serviceStatus: TransmissionStatus?) {
+                transmission.value = serviceStatus?.active ?: false
+            }
+
+            override fun onError(message: String) {
+                transmission.value = false
+            }
+        })
     }
 
     Scaffold(
         content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.padding(paddingValues)
             ) {
-                CardButton(text = "Verificar estado del servicio", onClick = {
-                    val controller = RaspberryPiController()
-                    controller.fetchServiceStatus(object : ServiceStatusCallback {
-                        override fun onSuccess(serviceStatus: StatsStatus?) {
-                            scope.launch {
-                                dialogMessage.value =
-                                    serviceStatus?.message
-                                        ?: "Error al obtener el estado del servicio"
-                                showDialog.value = true
-                            }
-                        }
-
-                        override fun onError(message: String) {
-                            Log.e("Stats", "Error: $message")
-                        }
-                    })
-                }, icon = Icons.Default.Refresh)
+                Column(modifier = Modifier.weight(1f)) {
+                    StatusCard(serviceName = "Transmission", isRunning = transmission.value)
+                }
+                Column(modifier = Modifier.weight(1f)) {
+                    StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
+                }
             }
         },
         topBar = {

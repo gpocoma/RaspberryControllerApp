@@ -124,6 +124,7 @@ fun MinidlnaContent() {
         },
         bottomBar = {
             MainBottomBar()
-        })
+        }
+    )
 }
 
