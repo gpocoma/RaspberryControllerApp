@@ -1,6 +1,7 @@
 package com.galopocoma.raspberrycontrollerapp.controllers
 
 import com.galopocoma.raspberrycontrollerapp.models.StatsStatus
+import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartTransmission
 import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
@@ -48,6 +49,11 @@ interface StopMinidlnaCallback {
     fun onError(message: String)
 }
 
+interface CPUUsageCallback {
+    fun onSuccess(cpuUsage: CPUUsage)
+    fun onError(message: String)
+}
+
 class RaspberryPiController {
 
     fun fetchServiceStatus(callback: ServiceStatusCallback) {
@@ -63,6 +69,24 @@ class RaspberryPiController {
             }
 
             override fun onFailure(call: Call<StatsStatus>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchCPUUsage(callback: CPUUsageCallback) {
+        val call = RetrofitClient.api.getCPUUsage()
+        call.enqueue(object : Callback<CPUUsage> {
+            override fun onResponse(call: Call<CPUUsage>, response: Response<CPUUsage>) {
+                if (response.isSuccessful) {
+                    val cpuUsage = response.body()
+                    callback.onSuccess(cpuUsage!!)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<CPUUsage>, t: Throwable) {
                 callback.onError("Failure: ${t.message}")
             }
         })

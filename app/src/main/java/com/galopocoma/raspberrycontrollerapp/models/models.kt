@@ -27,3 +27,7 @@ data class StartMinidlna(
 data class StopMinidlna(
     val message: String
     )
+
+data class CPUUsage(
+    val cpuUsagePercent: Double
+    )

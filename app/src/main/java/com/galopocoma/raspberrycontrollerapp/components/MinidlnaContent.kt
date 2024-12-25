@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -49,57 +53,69 @@ fun MinidlnaContent() {
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CardButton(text = "Status Minidlna", onClick = {
-                val controller = RaspberryPiController()
-                controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
-                    override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
-                        scope.launch {
-                            dialogMessage.value = if (minidlnaStatus?.active == true) {
-                                "Servicio en ejecución"
-                            } else {
-                                "Servicio detenido"
+            CardButton(
+                text = "Status Minidlna",
+                onClick = {
+                    val controller = RaspberryPiController()
+                    controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
+                        override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
+                            scope.launch {
+                                dialogMessage.value = if (minidlnaStatus?.active == true) {
+                                    "Servicio en ejecución"
+                                } else {
+                                    "Servicio detenido"
+                                }
+                                showDialog.value = true
                             }
-                            showDialog.value = true
                         }
-                    }
 
-                    override fun onError(message: String) {
-                        Log.e("Minidlna", "Error: $message")
-                    }
-                })
-            })
-            CardButton(text = "Iniciar Minidlna", onClick = {
-                val controller = RaspberryPiController()
-                controller.startMinidlna(object : StartMinidlnaCallback {
-                    override fun onSuccess(startMinidlna: StartMinidlna?) {
-                        scope.launch {
-                            dialogMessage.value =
-                                startMinidlna?.message ?: "Error al iniciar el servicio"
-                            showDialog.value = true
+                        override fun onError(message: String) {
+                            Log.e("Minidlna", "Error: $message")
                         }
-                    }
-
-                    override fun onError(message: String) {
-                        Log.e("Minidlna", "Error: $message")
-                    }
-                })
-            })
-            CardButton(text = "Detener Minidlna", onClick = {
-                val controller = RaspberryPiController()
-                controller.stopMinidlna(object : StopMinidlnaCallback {
-                    override fun onSuccess(stopMinidlna: StopMinidlna?) {
-                        scope.launch {
-                            dialogMessage.value =
-                                stopMinidlna?.message ?: "Error al detener el servicio"
-                            showDialog.value = true
+                    })
+                },
+                icon = Icons.Default.Refresh
+            )
+            CardButton(
+                text = "Iniciar Minidlna",
+                onClick = {
+                    val controller = RaspberryPiController()
+                    controller.startMinidlna(object : StartMinidlnaCallback {
+                        override fun onSuccess(startMinidlna: StartMinidlna?) {
+                            scope.launch {
+                                dialogMessage.value =
+                                    startMinidlna?.message ?: "Error al iniciar el servicio"
+                                showDialog.value = true
+                            }
                         }
-                    }
 
-                    override fun onError(message: String) {
-                        Log.e("Minidlna", "Error: $message")
-                    }
-                })
-            })
+                        override fun onError(message: String) {
+                            Log.e("Minidlna", "Error: $message")
+                        }
+                    })
+                },
+                icon = Icons.Default.PlayArrow
+            )
+            CardButton(
+                text = "Detener Minidlna",
+                onClick = {
+                    val controller = RaspberryPiController()
+                    controller.stopMinidlna(object : StopMinidlnaCallback {
+                        override fun onSuccess(stopMinidlna: StopMinidlna?) {
+                            scope.launch {
+                                dialogMessage.value =
+                                    stopMinidlna?.message ?: "Error al detener el servicio"
+                                showDialog.value = true
+                            }
+                        }
+
+                        override fun onError(message: String) {
+                            Log.e("Minidlna", "Error: $message")
+                        }
+                    })
+                },
+                icon = Icons.Default.Close
+            )
         }
     }, topBar = {
         MainTopBar()

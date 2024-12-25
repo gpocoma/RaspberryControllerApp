@@ -12,7 +12,7 @@ private val CustomDarkColorScheme = darkColorScheme(
     secondary = Color(0xFF6f263d), // Pantone 2
     tertiary = Color(0xFFb9975b), // Pantone 3
     surface = Color(0xFF97d700), // Pantone 4
-    background = Color(0xFFEEEEEE)
+    background = Color.Black
 )
 
 private val CustomLightColorScheme = lightColorScheme(
@@ -39,10 +39,11 @@ fun RaspberryControllerAppTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) CustomDarkColorScheme else CustomLightColorScheme
+    val typography = if (darkTheme) DarkTypography else LightTypography
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }

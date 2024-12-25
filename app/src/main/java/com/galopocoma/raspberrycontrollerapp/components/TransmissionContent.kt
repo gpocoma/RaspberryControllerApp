@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -49,27 +53,30 @@ fun TransmissionContent() {
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CardButton(text = "Status Transmission", onClick = {
-                val controller = RaspberryPiController()
-                controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
-                    override fun onSuccess(transmissionStatus: TransmissionStatus?) {
-                        scope.launch {
-                            dialogMessage.value = transmissionStatus?.active?.let {
-                                if (it) {
-                                    "Servicio en ejecución"
-                                } else {
-                                    "Servicio detenido"
-                                }
-                            } ?: "Error al obtener el estado del servicio"
-                            showDialog.value = true
+            CardButton(
+                text = "Status Transmission", onClick = {
+                    val controller = RaspberryPiController()
+                    controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
+                        override fun onSuccess(transmissionStatus: TransmissionStatus?) {
+                            scope.launch {
+                                dialogMessage.value = transmissionStatus?.active?.let {
+                                    if (it) {
+                                        "Servicio en ejecución"
+                                    } else {
+                                        "Servicio detenido"
+                                    }
+                                } ?: "Error al obtener el estado del servicio"
+                                showDialog.value = true
+                            }
                         }
-                    }
 
-                    override fun onError(message: String) {
-                        Log.e("Transmission", "Error: $message")
-                    }
-                })
-            })
+                        override fun onError(message: String) {
+                            Log.e("Transmission", "Error: $message")
+                        }
+                    })
+                },
+                icon = Icons.Default.Refresh
+            )
             CardButton(text = "Iniciar Transmission", onClick = {
                 val controller = RaspberryPiController()
                 controller.startTransmission(object : StartTransmissionCallback {
@@ -85,23 +92,25 @@ fun TransmissionContent() {
                         Log.e("Transmission", "Error: $message")
                     }
                 })
-            })
-            CardButton(text = "Detener Transmission", onClick = {
-                val controller = RaspberryPiController()
-                controller.stopTransmission(object : StopTransmissionCallback {
-                    override fun onSuccess(stopTransmission: StopTransmission?) {
-                        scope.launch {
-                            dialogMessage.value =
-                                stopTransmission?.message ?: "Error al detener el servicio"
-                            showDialog.value = true
+            }, icon = Icons.Default.PlayArrow)
+            CardButton(
+                text = "Detener Transmission", onClick = {
+                    val controller = RaspberryPiController()
+                    controller.stopTransmission(object : StopTransmissionCallback {
+                        override fun onSuccess(stopTransmission: StopTransmission?) {
+                            scope.launch {
+                                dialogMessage.value =
+                                    stopTransmission?.message ?: "Error al detener el servicio"
+                                showDialog.value = true
+                            }
                         }
-                    }
 
-                    override fun onError(message: String) {
-                        Log.e("Transmission", "Error: $message")
-                    }
-                })
-            })
+                        override fun onError(message: String) {
+                            Log.e("Transmission", "Error: $message")
+                        }
+                    })
+                }, icon = Icons.Default.Close
+            )
         }
     }, topBar = {
         MainTopBar()

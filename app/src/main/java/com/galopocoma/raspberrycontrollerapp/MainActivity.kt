@@ -117,14 +117,13 @@ fun MainContent() {
                 }
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text("Transmission") },
-                    selected = selectedScreen.value == Screen.Transmission,
+                    label = { Text("Stats") },
+                    selected = selectedScreen.value == Screen.Stats,
                     onClick = {
-                        selectedScreen.value = Screen.Transmission
+                        selectedScreen.value = Screen.Stats
                         scope.launch { drawerState.close() }
                     },
                     shape = RoundedCornerShape(4.dp)
-
                 )
                 NavigationDrawerItem(
                     label = { Text("MiniDLNA") },
@@ -136,10 +135,10 @@ fun MainContent() {
                     shape = RoundedCornerShape(4.dp)
                 )
                 NavigationDrawerItem(
-                    label = { Text("Stats") },
-                    selected = selectedScreen.value == Screen.Stats,
+                    label = { Text("Transmission") },
+                    selected = selectedScreen.value == Screen.Transmission,
                     onClick = {
-                        selectedScreen.value = Screen.Stats
+                        selectedScreen.value = Screen.Transmission
                         scope.launch { drawerState.close() }
                     },
                     shape = RoundedCornerShape(4.dp)
