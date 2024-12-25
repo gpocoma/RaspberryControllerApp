@@ -31,3 +31,10 @@ data class StopMinidlna(
 data class CPUUsage(
     val cpuUsagePercent: Double
     )
+
+data class RAMUsage(
+    val totalMB: Double,
+    val usedMB: Double,
+    val freeMB: Double,
+    val usedPercent: Double
+    )

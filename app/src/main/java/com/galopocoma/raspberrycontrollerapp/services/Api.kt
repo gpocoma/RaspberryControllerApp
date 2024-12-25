@@ -8,6 +8,7 @@ import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -21,6 +22,9 @@ interface RaspberryPiApi {
 
     @GET("stats/cpu-usage")
     fun getCPUUsage(): Call<CPUUsage>
+
+    @GET("stats/ram-usage")
+    fun getRAMUsage(): Call<RAMUsage>
 
     @GET("transmission/")
     fun getTransmissionStatus(): Call<TransmissionStatus>

@@ -46,79 +46,84 @@ fun MinidlnaContent() {
             }
         )
     }
-    Scaffold(content = { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CardButton(
-                text = "Status Minidlna",
-                onClick = {
-                    val controller = RaspberryPiController()
-                    controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
-                        override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
-                            scope.launch {
-                                dialogMessage.value = if (minidlnaStatus?.active == true) {
-                                    "Servicio en ejecución"
-                                } else {
-                                    "Servicio detenido"
+    Scaffold(
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CardButton(
+                    text = "Status Minidlna",
+                    onClick = {
+                        val controller = RaspberryPiController()
+                        controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
+                            override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
+                                scope.launch {
+                                    dialogMessage.value = if (minidlnaStatus?.active == true) {
+                                        "Servicio en ejecución"
+                                    } else {
+                                        "Servicio detenido"
+                                    }
+                                    showDialog.value = true
                                 }
-                                showDialog.value = true
                             }
-                        }
 
-                        override fun onError(message: String) {
-                            Log.e("Minidlna", "Error: $message")
-                        }
-                    })
-                },
-                icon = Icons.Default.Refresh
-            )
-            CardButton(
-                text = "Iniciar Minidlna",
-                onClick = {
-                    val controller = RaspberryPiController()
-                    controller.startMinidlna(object : StartMinidlnaCallback {
-                        override fun onSuccess(startMinidlna: StartMinidlna?) {
-                            scope.launch {
-                                dialogMessage.value =
-                                    startMinidlna?.message ?: "Error al iniciar el servicio"
-                                showDialog.value = true
+                            override fun onError(message: String) {
+                                Log.e("Minidlna", "Error: $message")
                             }
-                        }
-
-                        override fun onError(message: String) {
-                            Log.e("Minidlna", "Error: $message")
-                        }
-                    })
-                },
-                icon = Icons.Default.PlayArrow
-            )
-            CardButton(
-                text = "Detener Minidlna",
-                onClick = {
-                    val controller = RaspberryPiController()
-                    controller.stopMinidlna(object : StopMinidlnaCallback {
-                        override fun onSuccess(stopMinidlna: StopMinidlna?) {
-                            scope.launch {
-                                dialogMessage.value =
-                                    stopMinidlna?.message ?: "Error al detener el servicio"
-                                showDialog.value = true
+                        })
+                    },
+                    icon = Icons.Default.Refresh
+                )
+                CardButton(
+                    text = "Iniciar Minidlna",
+                    onClick = {
+                        val controller = RaspberryPiController()
+                        controller.startMinidlna(object : StartMinidlnaCallback {
+                            override fun onSuccess(startMinidlna: StartMinidlna?) {
+                                scope.launch {
+                                    dialogMessage.value =
+                                        startMinidlna?.message ?: "Error al iniciar el servicio"
+                                    showDialog.value = true
+                                }
                             }
-                        }
 
-                        override fun onError(message: String) {
-                            Log.e("Minidlna", "Error: $message")
-                        }
-                    })
-                },
-                icon = Icons.Default.Close
-            )
-        }
-    }, topBar = {
-        MainTopBar()
-    })
+                            override fun onError(message: String) {
+                                Log.e("Minidlna", "Error: $message")
+                            }
+                        })
+                    },
+                    icon = Icons.Default.PlayArrow
+                )
+                CardButton(
+                    text = "Detener Minidlna",
+                    onClick = {
+                        val controller = RaspberryPiController()
+                        controller.stopMinidlna(object : StopMinidlnaCallback {
+                            override fun onSuccess(stopMinidlna: StopMinidlna?) {
+                                scope.launch {
+                                    dialogMessage.value =
+                                        stopMinidlna?.message ?: "Error al detener el servicio"
+                                    showDialog.value = true
+                                }
+                            }
+
+                            override fun onError(message: String) {
+                                Log.e("Minidlna", "Error: $message")
+                            }
+                        })
+                    },
+                    icon = Icons.Default.Close
+                )
+            }
+        },
+        topBar = {
+            MainTopBar()
+        },
+        bottomBar = {
+            MainBottomBar()
+        })
 }
 

@@ -46,61 +46,45 @@ fun TransmissionContent() {
             }
         )
     }
-    Scaffold(content = { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CardButton(
-                text = "Status Transmission", onClick = {
-                    val controller = RaspberryPiController()
-                    controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
-                        override fun onSuccess(transmissionStatus: TransmissionStatus?) {
-                            scope.launch {
-                                dialogMessage.value = transmissionStatus?.active?.let {
-                                    if (it) {
-                                        "Servicio en ejecución"
-                                    } else {
-                                        "Servicio detenido"
-                                    }
-                                } ?: "Error al obtener el estado del servicio"
-                                showDialog.value = true
+    Scaffold(
+        content = { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CardButton(
+                    text = "Status Transmission", onClick = {
+                        val controller = RaspberryPiController()
+                        controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
+                            override fun onSuccess(transmissionStatus: TransmissionStatus?) {
+                                scope.launch {
+                                    dialogMessage.value = transmissionStatus?.active?.let {
+                                        if (it) {
+                                            "Servicio en ejecución"
+                                        } else {
+                                            "Servicio detenido"
+                                        }
+                                    } ?: "Error al obtener el estado del servicio"
+                                    showDialog.value = true
+                                }
                             }
-                        }
 
-                        override fun onError(message: String) {
-                            Log.e("Transmission", "Error: $message")
-                        }
-                    })
-                },
-                icon = Icons.Default.Refresh
-            )
-            CardButton(text = "Iniciar Transmission", onClick = {
-                val controller = RaspberryPiController()
-                controller.startTransmission(object : StartTransmissionCallback {
-                    override fun onSuccess(startTransmission: StartTransmission?) {
-                        scope.launch {
-                            dialogMessage.value =
-                                startTransmission?.message ?: "Error al iniciar el servicio"
-                            showDialog.value = true
-                        }
-                    }
-
-                    override fun onError(message: String) {
-                        Log.e("Transmission", "Error: $message")
-                    }
-                })
-            }, icon = Icons.Default.PlayArrow)
-            CardButton(
-                text = "Detener Transmission", onClick = {
+                            override fun onError(message: String) {
+                                Log.e("Transmission", "Error: $message")
+                            }
+                        })
+                    },
+                    icon = Icons.Default.Refresh
+                )
+                CardButton(text = "Iniciar Transmission", onClick = {
                     val controller = RaspberryPiController()
-                    controller.stopTransmission(object : StopTransmissionCallback {
-                        override fun onSuccess(stopTransmission: StopTransmission?) {
+                    controller.startTransmission(object : StartTransmissionCallback {
+                        override fun onSuccess(startTransmission: StartTransmission?) {
                             scope.launch {
                                 dialogMessage.value =
-                                    stopTransmission?.message ?: "Error al detener el servicio"
+                                    startTransmission?.message ?: "Error al iniciar el servicio"
                                 showDialog.value = true
                             }
                         }
@@ -109,10 +93,32 @@ fun TransmissionContent() {
                             Log.e("Transmission", "Error: $message")
                         }
                     })
-                }, icon = Icons.Default.Close
-            )
+                }, icon = Icons.Default.PlayArrow)
+                CardButton(
+                    text = "Detener Transmission", onClick = {
+                        val controller = RaspberryPiController()
+                        controller.stopTransmission(object : StopTransmissionCallback {
+                            override fun onSuccess(stopTransmission: StopTransmission?) {
+                                scope.launch {
+                                    dialogMessage.value =
+                                        stopTransmission?.message ?: "Error al detener el servicio"
+                                    showDialog.value = true
+                                }
+                            }
+
+                            override fun onError(message: String) {
+                                Log.e("Transmission", "Error: $message")
+                            }
+                        })
+                    }, icon = Icons.Default.Close
+                )
+            }
+        },
+        topBar = {
+            MainTopBar()
+        },
+        bottomBar = {
+            MainBottomBar()
         }
-    }, topBar = {
-        MainTopBar()
-    })
+    )
 }

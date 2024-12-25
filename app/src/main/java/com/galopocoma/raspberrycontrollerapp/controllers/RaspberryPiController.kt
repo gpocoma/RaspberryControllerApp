@@ -2,6 +2,7 @@ package com.galopocoma.raspberrycontrollerapp.controllers
 
 import com.galopocoma.raspberrycontrollerapp.models.StatsStatus
 import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartTransmission
 import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
@@ -54,6 +55,11 @@ interface CPUUsageCallback {
     fun onError(message: String)
 }
 
+interface RAMUsageCallback {
+    fun onSuccess(ramUsage: RAMUsage)
+    fun onError(message: String)
+}
+
 class RaspberryPiController {
 
     fun fetchServiceStatus(callback: ServiceStatusCallback) {
@@ -87,6 +93,24 @@ class RaspberryPiController {
             }
 
             override fun onFailure(call: Call<CPUUsage>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchRAMUsage(callback: RAMUsageCallback) {
+        val call = RetrofitClient.api.getRAMUsage()
+        call.enqueue(object : Callback<RAMUsage> {
+            override fun onResponse(call: Call<RAMUsage>, response: Response<RAMUsage>) {
+                if (response.isSuccessful) {
+                    val ramUsage = response.body()
+                    callback.onSuccess(ramUsage!!)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<RAMUsage>, t: Throwable) {
                 callback.onError("Failure: ${t.message}")
             }
         })
