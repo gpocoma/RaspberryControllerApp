@@ -39,6 +39,7 @@ fun MinidlnaContent() {
     val showDialog = remember { mutableStateOf(false) }
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
+    val controller = remember { RaspberryPiController() }
     val scope = rememberCoroutineScope()
     if (showDialog.value) {
         AlertDialog(
@@ -68,7 +69,6 @@ fun MinidlnaContent() {
                         text = "Status Minidlna",
                         onClick = {
                             showModal.value = true
-                            val controller = RaspberryPiController()
                             controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
                                 override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
                                     scope.launch {
@@ -94,7 +94,6 @@ fun MinidlnaContent() {
                         text = "Iniciar Minidlna",
                         onClick = {
                             showModal.value = true
-                            val controller = RaspberryPiController()
                             controller.startMinidlna(object : StartMinidlnaCallback {
                                 override fun onSuccess(startMinidlna: StartMinidlna?) {
                                     scope.launch {
@@ -117,7 +116,6 @@ fun MinidlnaContent() {
                         text = "Detener Minidlna",
                         onClick = {
                             showModal.value = true
-                            val controller = RaspberryPiController()
                             controller.stopMinidlna(object : StopMinidlnaCallback {
                                 override fun onSuccess(stopMinidlna: StopMinidlna?) {
                                     scope.launch {

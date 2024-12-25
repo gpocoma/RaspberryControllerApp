@@ -39,6 +39,7 @@ fun TransmissionContent() {
     val showDialog = remember { mutableStateOf(false) }
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
+    val controller = remember { RaspberryPiController() }
     val scope = rememberCoroutineScope()
 
     // Mostrar el dialogo con el estado
@@ -78,7 +79,6 @@ fun TransmissionContent() {
                     CardButton(
                         text = "Status Transmission", onClick = {
                             showModal.value = true
-                            val controller = RaspberryPiController()
                             controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
                                 override fun onSuccess(transmissionStatus: TransmissionStatus?) {
                                     scope.launch {
@@ -104,7 +104,6 @@ fun TransmissionContent() {
                     )
                     CardButton(text = "Iniciar Transmission", onClick = {
                         showModal.value = true
-                        val controller = RaspberryPiController()
                         controller.startTransmission(object : StartTransmissionCallback {
                             override fun onSuccess(startTransmission: StartTransmission?) {
                                 scope.launch {
@@ -124,7 +123,6 @@ fun TransmissionContent() {
                     CardButton(
                         text = "Detener Transmission", onClick = {
                             showModal.value = true
-                            val controller = RaspberryPiController()
                             controller.stopTransmission(object : StopTransmissionCallback {
                                 override fun onSuccess(stopTransmission: StopTransmission?) {
                                     scope.launch {

@@ -19,11 +19,11 @@ import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 
 @Composable
 fun StatsContent() {
-    val controller = RaspberryPiController()
+    val controller = remember { RaspberryPiController() }
     val minidlna = remember { mutableStateOf(false) }
     val transmission = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = minidlna) {
+    LaunchedEffect(Unit) {
         controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
             override fun onSuccess(serviceStatus: MinidlnaStatus?) {
                 minidlna.value = serviceStatus?.active ?: false
@@ -45,9 +45,13 @@ fun StatsContent() {
     }
 
     Scaffold(
+        topBar = { MainTopBar() },
+        bottomBar = { MainBottomBar() },
         content = { paddingValues ->
             Row(
-                modifier = Modifier.padding(paddingValues).verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     StatusCard(serviceName = "Transmission", isRunning = transmission.value)
@@ -56,12 +60,6 @@ fun StatsContent() {
                     StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
                 }
             }
-        },
-        topBar = {
-            MainTopBar()
-        },
-        bottomBar = {
-            MainBottomBar()
         }
     )
 }

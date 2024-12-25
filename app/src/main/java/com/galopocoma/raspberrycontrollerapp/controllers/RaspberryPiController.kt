@@ -21,32 +21,32 @@ interface ServiceStatusCallback {
 }
 
 interface TransmissionStatusCallback {
-    fun onSuccess(serviceStatus: TransmissionStatus?)
+    fun onSuccess(transmissionStatus: TransmissionStatus?)
     fun onError(message: String)
 }
 
 interface StartTransmissionCallback {
-    fun onSuccess(serviceStatus: StartTransmission?)
+    fun onSuccess(startTransmission: StartTransmission?)
     fun onError(message: String)
 }
 
 interface StopTransmissionCallback {
-    fun onSuccess(serviceStatus: StopTransmission?)
+    fun onSuccess(stopTransmission: StopTransmission?)
     fun onError(message: String)
 }
 
 interface MinidlnaStatusCallback {
-    fun onSuccess(serviceStatus: MinidlnaStatus?)
+    fun onSuccess(minidlnaStatus: MinidlnaStatus?)
     fun onError(message: String)
 }
 
 interface StartMinidlnaCallback {
-    fun onSuccess(serviceStatus: StartMinidlna?)
+    fun onSuccess(startMinidlna: StartMinidlna?)
     fun onError(message: String)
 }
 
 interface StopMinidlnaCallback {
-    fun onSuccess(serviceStatus: StopMinidlna?)
+    fun onSuccess(stopMinidlna: StopMinidlna?)
     fun onError(message: String)
 }
 
