@@ -3,6 +3,8 @@ package com.galopocoma.raspberrycontrollerapp.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +47,7 @@ fun StatsContent() {
     Scaffold(
         content = { paddingValues ->
             Row(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues).verticalScroll(rememberScrollState())
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     StatusCard(serviceName = "Transmission", isRunning = transmission.value)
