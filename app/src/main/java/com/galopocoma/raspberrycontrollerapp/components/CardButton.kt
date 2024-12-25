@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.galopocoma.raspberrycontrollerapp.ui.theme.RaspberryControllerAppTheme
 
 @Composable
 fun CardButton(onClick: () -> Unit, text: String, icon: ImageVector? = null) {
@@ -33,6 +34,7 @@ fun CardButton(onClick: () -> Unit, text: String, icon: ImageVector? = null) {
                 Text(
                     text = text,
                     color = MaterialTheme.colorScheme.background,
+                    style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.weight(3f).align(Alignment.CenterVertically),
                 )
                 val iconSize = 125.dp * 0.5f
@@ -56,5 +58,8 @@ fun CardButton(onClick: () -> Unit, text: String, icon: ImageVector? = null) {
 @Preview
 @Composable
 fun CardButtonPreview() {
-    CardButton(onClick = { /*TODO*/ }, text = "Card Button")
+    RaspberryControllerAppTheme {
+        CardButton(onClick = { /*TODO*/ }, text = "Card Button")
+    }
+
 }

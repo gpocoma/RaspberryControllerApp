@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import com.galopocoma.raspberrycontrollerapp.components.CustomCircularProgressIndicator
 import com.galopocoma.raspberrycontrollerapp.ui.theme.RaspberryControllerAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -94,11 +95,8 @@ fun SplashScreen() {
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.size(16.dp))
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.secondary,
-                    strokeWidth = 4.dp
-                )
+                Spacer(modifier = Modifier.size(32.dp))
+                CustomCircularProgressIndicator()
             }
         }
     }
