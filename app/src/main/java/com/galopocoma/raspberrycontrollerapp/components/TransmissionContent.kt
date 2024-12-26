@@ -32,7 +32,6 @@ import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallb
 import com.galopocoma.raspberrycontrollerapp.models.StartTransmission
 import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
-import kotlinx.coroutines.launch
 
 @Composable
 fun TransmissionContent() {
@@ -40,7 +39,6 @@ fun TransmissionContent() {
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
     val controller = remember { RaspberryPiController() }
-    val scope = rememberCoroutineScope()
 
     // Mostrar el dialogo con el estado
     if (showDialog.value) {
@@ -81,17 +79,15 @@ fun TransmissionContent() {
                             showModal.value = true
                             controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
                                 override fun onSuccess(transmissionStatus: TransmissionStatus?) {
-                                    scope.launch {
-                                        dialogMessage.value = transmissionStatus?.active?.let {
-                                            if (it) {
-                                                "Servicio en ejecución"
-                                            } else {
-                                                "Servicio detenido"
-                                            }
-                                        } ?: "Error al obtener el estado del servicio"
-                                        showDialog.value = true
-                                        showModal.value = false
-                                    }
+                                    dialogMessage.value = transmissionStatus?.active?.let {
+                                        if (it) {
+                                            "Servicio en ejecución"
+                                        } else {
+                                            "Servicio detenido"
+                                        }
+                                    } ?: "Error al obtener el estado del servicio"
+                                    showDialog.value = true
+                                    showModal.value = false
                                 }
 
                                 override fun onError(message: String) {
@@ -102,36 +98,16 @@ fun TransmissionContent() {
                         },
                         icon = Icons.Default.Refresh
                     )
-                    CardButton(text = "Iniciar Transmission", onClick = {
-                        showModal.value = true
-                        controller.startTransmission(object : StartTransmissionCallback {
-                            override fun onSuccess(startTransmission: StartTransmission?) {
-                                scope.launch {
+                    CardButton(
+                        text = "Iniciar Transmission",
+                        onClick = {
+                            showModal.value = true
+                            controller.startTransmission(object : StartTransmissionCallback {
+                                override fun onSuccess(startTransmission: StartTransmission?) {
                                     dialogMessage.value =
                                         startTransmission?.message ?: "Error al iniciar el servicio"
                                     showDialog.value = true
                                     showModal.value = false
-                                }
-                            }
-
-                            override fun onError(message: String) {
-                                Log.e("Transmission", "Error: $message")
-                                showModal.value = false
-                            }
-                        })
-                    }, icon = Icons.Default.PlayArrow)
-                    CardButton(
-                        text = "Detener Transmission", onClick = {
-                            showModal.value = true
-                            controller.stopTransmission(object : StopTransmissionCallback {
-                                override fun onSuccess(stopTransmission: StopTransmission?) {
-                                    scope.launch {
-                                        dialogMessage.value =
-                                            stopTransmission?.message
-                                                ?: "Error al detener el servicio"
-                                        showDialog.value = true
-                                        showModal.value = false
-                                    }
                                 }
 
                                 override fun onError(message: String) {
@@ -139,7 +115,29 @@ fun TransmissionContent() {
                                     showModal.value = false
                                 }
                             })
-                        }, icon = Icons.Default.Close
+                        },
+                        icon = Icons.Default.PlayArrow
+                    )
+                    CardButton(
+                        text = "Detener Transmission",
+                        onClick = {
+                            showModal.value = true
+                            controller.stopTransmission(object : StopTransmissionCallback {
+                                override fun onSuccess(stopTransmission: StopTransmission?) {
+                                    dialogMessage.value =
+                                        stopTransmission?.message
+                                            ?: "Error al detener el servicio"
+                                    showDialog.value = true
+                                    showModal.value = false
+                                }
+
+                                override fun onError(message: String) {
+                                    Log.e("Transmission", "Error: $message")
+                                    showModal.value = false
+                                }
+                            })
+                        },
+                        icon = Icons.Default.Close
                     )
                 }
 

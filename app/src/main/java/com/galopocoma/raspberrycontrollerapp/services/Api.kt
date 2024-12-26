@@ -9,7 +9,7 @@ import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
 import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
-
+import com.galopocoma.raspberrycontrollerapp.models.SystemShutdown
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.Retrofit
@@ -25,6 +25,9 @@ interface RaspberryPiApi {
 
     @GET("system-monitor/ram-usage")
     fun getRAMUsage(): Call<RAMUsage>
+
+    @POST("system-monitor/shutdown")
+    fun shutdown(): Call<SystemShutdown>
 
     @GET("transmission/")
     fun getTransmissionStatus(): Call<TransmissionStatus>

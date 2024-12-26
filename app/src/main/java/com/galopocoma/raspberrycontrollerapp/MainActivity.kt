@@ -68,7 +68,7 @@ fun MainContent() {
                 }
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text("Stats") },
+                    label = { Text("Home") },
                     selected = selectedScreen.value == Screen.Stats,
                     onClick = {
                         selectedScreen.value = Screen.Stats

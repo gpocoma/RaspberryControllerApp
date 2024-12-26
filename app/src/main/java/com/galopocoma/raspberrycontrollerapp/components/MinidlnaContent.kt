@@ -32,7 +32,6 @@ import com.galopocoma.raspberrycontrollerapp.controllers.StopMinidlnaCallback
 import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
-import kotlinx.coroutines.launch
 
 @Composable
 fun MinidlnaContent() {
@@ -40,7 +39,7 @@ fun MinidlnaContent() {
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
     val controller = remember { RaspberryPiController() }
-    val scope = rememberCoroutineScope()
+
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { showDialog.value = false },
@@ -71,15 +70,13 @@ fun MinidlnaContent() {
                             showModal.value = true
                             controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
                                 override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
-                                    scope.launch {
-                                        dialogMessage.value = if (minidlnaStatus?.active == true) {
-                                            "Servicio en ejecución"
-                                        } else {
-                                            "Servicio detenido"
-                                        }
-                                        showDialog.value = true
-                                        showModal.value = false
+                                    dialogMessage.value = if (minidlnaStatus?.active == true) {
+                                        "Servicio en ejecución"
+                                    } else {
+                                        "Servicio detenido"
                                     }
+                                    showDialog.value = true
+                                    showModal.value = false
                                 }
 
                                 override fun onError(message: String) {
@@ -96,12 +93,10 @@ fun MinidlnaContent() {
                             showModal.value = true
                             controller.startMinidlna(object : StartMinidlnaCallback {
                                 override fun onSuccess(startMinidlna: StartMinidlna?) {
-                                    scope.launch {
-                                        dialogMessage.value =
-                                            startMinidlna?.message ?: "Error al iniciar el servicio"
-                                        showDialog.value = true
-                                        showModal.value = false
-                                    }
+                                    dialogMessage.value =
+                                        startMinidlna?.message ?: "Error al iniciar el servicio"
+                                    showDialog.value = true
+                                    showModal.value = false
                                 }
 
                                 override fun onError(message: String) {
@@ -118,12 +113,10 @@ fun MinidlnaContent() {
                             showModal.value = true
                             controller.stopMinidlna(object : StopMinidlnaCallback {
                                 override fun onSuccess(stopMinidlna: StopMinidlna?) {
-                                    scope.launch {
-                                        dialogMessage.value =
-                                            stopMinidlna?.message ?: "Error al detener el servicio"
-                                        showDialog.value = true
-                                        showModal.value = false
-                                    }
+                                    dialogMessage.value =
+                                        stopMinidlna?.message ?: "Error al detener el servicio"
+                                    showDialog.value = true
+                                    showModal.value = false
                                 }
 
                                 override fun onError(message: String) {

@@ -38,3 +38,7 @@ data class RAMUsage(
     val freeMB: Double,
     val usedPercent: Double
     )
+
+data class SystemShutdown(
+    val message: String
+    )
