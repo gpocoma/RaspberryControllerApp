@@ -17,13 +17,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.POST
 
 interface RaspberryPiApi {
-    @GET("stats/")
+    @GET("system-monitor/")
     fun getServiceStatus(): Call<StatsStatus>
 
-    @GET("stats/cpu-usage")
+    @GET("system-monitor/cpu-usage")
     fun getCPUUsage(): Call<CPUUsage>
 
-    @GET("stats/ram-usage")
+    @GET("system-monitor/ram-usage")
     fun getRAMUsage(): Call<RAMUsage>
 
     @GET("transmission/")
