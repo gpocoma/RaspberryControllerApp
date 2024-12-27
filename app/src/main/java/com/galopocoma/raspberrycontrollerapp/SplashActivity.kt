@@ -86,12 +86,12 @@ fun SplashScreen() {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = "App Logo",
-                    tint = MaterialTheme.colorScheme.surface,
+                    tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(128.dp)
                 )
                 Text(
                     text = "Verificando conexión...",
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )

@@ -54,48 +54,50 @@ fun MainContent() {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val selectedScreen = remember { mutableStateOf<Screen>(Screen.Stats) }
         val scope = rememberCoroutineScope()
-        ModalNavigationDrawer(drawerState = drawerState, drawerContent = {
-            ModalDrawerSheet {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Raspberry Controller App",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(16.dp)
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Raspberry Controller App",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = { Text("Home") },
+                        selected = selectedScreen.value == Screen.Stats,
+                        onClick = {
+                            selectedScreen.value = Screen.Stats
+                            scope.launch { drawerState.close() }
+                        },
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    NavigationDrawerItem(
+                        label = { Text("MiniDLNA") },
+                        selected = selectedScreen.value == Screen.Minidlna,
+                        onClick = {
+                            selectedScreen.value = Screen.Minidlna
+                            scope.launch { drawerState.close() }
+                        },
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    NavigationDrawerItem(
+                        label = { Text("Transmission") },
+                        selected = selectedScreen.value == Screen.Transmission,
+                        onClick = {
+                            selectedScreen.value = Screen.Transmission
+                            scope.launch { drawerState.close() }
+                        },
+                        shape = RoundedCornerShape(4.dp)
                     )
                 }
-                HorizontalDivider()
-                NavigationDrawerItem(
-                    label = { Text("Home") },
-                    selected = selectedScreen.value == Screen.Stats,
-                    onClick = {
-                        selectedScreen.value = Screen.Stats
-                        scope.launch { drawerState.close() }
-                    },
-                    shape = RoundedCornerShape(4.dp)
-                )
-                NavigationDrawerItem(
-                    label = { Text("MiniDLNA") },
-                    selected = selectedScreen.value == Screen.Minidlna,
-                    onClick = {
-                        selectedScreen.value = Screen.Minidlna
-                        scope.launch { drawerState.close() }
-                    },
-                    shape = RoundedCornerShape(4.dp)
-                )
-                NavigationDrawerItem(
-                    label = { Text("Transmission") },
-                    selected = selectedScreen.value == Screen.Transmission,
-                    onClick = {
-                        selectedScreen.value = Screen.Transmission
-                        scope.launch { drawerState.close() }
-                    },
-                    shape = RoundedCornerShape(4.dp)
-                )
-            }
-        }) {
+            }) {
             when (selectedScreen.value) {
                 Screen.Stats -> StatsContent()
                 Screen.Transmission -> TransmissionContent()

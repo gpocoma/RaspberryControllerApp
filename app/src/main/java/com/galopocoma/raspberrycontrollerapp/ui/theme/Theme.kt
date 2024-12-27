@@ -8,29 +8,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val CustomDarkColorScheme = darkColorScheme(
-    primary = Color(0xFF286140), // Pantone 1
-    secondary = Color(0xFF6f263d), // Pantone 2
-    tertiary = Color(0xFFb9975b), // Pantone 3
-    surface = Color(0xFF97d700), // Pantone 4
-    background = Color.Black
+    primary = Color(0xFF286140),
+    secondary = Color(0xFF6f263d),
+    tertiary = Color(0xFFb9975b),
+    surface = Color(0xFF97d700),
+    background = Color.Black,
+
+    onPrimary =Color(0xFFEEEEEE),
+    onSecondary = Color(0xFFEEEEEE),
+    onTertiary = Color(0xFF286140),
+    onSurface = Color(0xFFEEEEEE),
+    onBackground = Color(0xFF4A8C6F)
 )
 
 private val CustomLightColorScheme = lightColorScheme(
-    primary = Color(0xFF286140), // Pantone 1
-    secondary = Color(0xFF6f263d), // Pantone 2
-    tertiary = Color(0xFFb9975b), // Pantone 3
-    surface = Color(0xFF97d700), // Pantone 4
-    background = Color(0xFFEEEEEE)
+    primary = Color(0xFF286140),
+    secondary = Color(0xFF6f263d),
+    tertiary = Color(0xFFb9975b),
+    surface = Color(0xFF97d700),
+    background = Color(0xFFEEEEEE),
 
-    /* Other default colors to override
-    background = Color(0xFFFFFFFF),
-    surface = Color(0xFFFFFFFF),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    onPrimary = Color(0xFFEEEEEE),
+    onSecondary = Color(0xFFEEEEEE),
+    onTertiary = Color(0xFF286140),
+    onSurface = Color(0xFFEEEEEE),
+    onBackground = Color(0xFF4A8C6F)
 )
 
 @Composable

@@ -4,6 +4,8 @@ import com.galopocoma.raspberrycontrollerapp.models.StatsStatus
 import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
 import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.SystemShutdown
+import com.galopocoma.raspberrycontrollerapp.models.SystemInfo
+
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartTransmission
 import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
@@ -11,6 +13,7 @@ import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
 import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
+
 import com.galopocoma.raspberrycontrollerapp.services.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,6 +69,11 @@ interface SystemShutdownCallback {
     fun onError(message: String)
 }
 
+interface SystemInfoCallback {
+    fun onSuccess(systemInfo: SystemInfo)
+    fun onError(message: String)
+}
+
 class RaspberryPiController {
 
     fun fetchServiceStatus(callback: ServiceStatusCallback) {
@@ -117,6 +125,24 @@ class RaspberryPiController {
             }
 
             override fun onFailure(call: Call<RAMUsage>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchSystemInfo(callback: SystemInfoCallback) {
+        val call = RetrofitClient.api.getSystemInfo()
+        call.enqueue(object : Callback<SystemInfo> {
+            override fun onResponse(call: Call<SystemInfo>, response: Response<SystemInfo>) {
+                if (response.isSuccessful) {
+                    val systemInfo = response.body()
+                    callback.onSuccess(systemInfo!!)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SystemInfo>, t: Throwable) {
                 callback.onError("Failure: ${t.message}")
             }
         })

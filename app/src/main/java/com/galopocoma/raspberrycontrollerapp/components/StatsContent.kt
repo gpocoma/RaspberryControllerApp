@@ -2,6 +2,7 @@ package com.galopocoma.raspberrycontrollerapp.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -48,17 +49,20 @@ fun StatsContent() {
         topBar = { MainTopBar() },
         bottomBar = { MainBottomBar() },
         content = { paddingValues ->
-            Row(
+            Column(
                 modifier = Modifier
                     .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    StatusCard(serviceName = "Transmission", isRunning = transmission.value)
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        StatusCard(serviceName = "Transmission", isRunning = transmission.value)
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
+                    }
                 }
-                Column(modifier = Modifier.weight(1f)) {
-                    StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
-                }
+                SystemInfoCard()
             }
         }
     )

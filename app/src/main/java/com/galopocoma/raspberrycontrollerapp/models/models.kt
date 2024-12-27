@@ -42,3 +42,16 @@ data class RAMUsage(
 data class SystemShutdown(
     val message: String
     )
+
+data class SystemInfo(
+    val hostname: String,
+    val uptime: String,
+    val bootTime: String,
+    val os: String,
+    val platform: String,
+    val platformFamily: String,
+    val platformVersion: String,
+    val kernelVersion: String,
+    val virtualizationSystem: String,
+    val virtualizationRole: String
+    )

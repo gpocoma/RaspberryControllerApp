@@ -95,7 +95,7 @@ fun MainTopBar() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.surface),
+                .background(color = MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -117,7 +117,7 @@ fun MainTopBar() {
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Box {
                     IconButton(
@@ -126,20 +126,23 @@ fun MainTopBar() {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "Menu",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                     DropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiary)
                     ) {
                         DropdownMenuItem(
                             text = {
                                 Text(
-                                    "Apagar Raspberry",
-                                    style = MaterialTheme.typography.bodyMedium
+                                    text = "Apagar Raspberry",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onTertiary
                                 )
                             },
+                            modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiary),
                             onClick = {
                                 showConfirmationDialog.value = true
                             }

@@ -47,6 +47,14 @@ val LightTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.sp,
         color = Color.White
+    ),
+    labelMedium = TextStyle(
+        fontFamily = UniNeue,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
+        letterSpacing = 0.sp,
+        color = Color.White
     )
 )
 
@@ -80,6 +88,14 @@ val DarkTypography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 20.sp,
+        letterSpacing = 0.sp,
+        color = Color.White
+    ),
+    labelMedium = TextStyle(
+        fontFamily = UniNeue,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
         letterSpacing = 0.sp,
         color = Color.White
     )
