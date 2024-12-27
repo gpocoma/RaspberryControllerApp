@@ -1,6 +1,7 @@
 package com.galopocoma.raspberrycontrollerapp.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ fun MainBottomBar(ramUsage: RAMUsage?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.tertiary)
+            .background(color = MaterialTheme.colorScheme.primary)
             .navigationBarsPadding(),
         contentAlignment = Alignment.Center
     ) {
@@ -56,11 +57,12 @@ fun MainBottomBar(ramUsage: RAMUsage?) {
                 .fillMaxWidth()
                 .padding(8.dp)
                 .heightIn(24.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "CPU: ${String.format("%.4f", currentCPUUsage.value)} %",
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
@@ -68,7 +70,7 @@ fun MainBottomBar(ramUsage: RAMUsage?) {
             )
             Text(
                 text = "RAM: ${String.format("%.4f", ramUsage?.usedPercent)} %",
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
