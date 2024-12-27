@@ -30,11 +30,12 @@ import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
 import com.galopocoma.raspberrycontrollerapp.controllers.StartMinidlnaCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.StopMinidlnaCallback
 import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
 
 @Composable
-fun MinidlnaContent() {
+fun MinidlnaContent(ramUsage: RAMUsage?) {
     val showDialog = remember { mutableStateOf(false) }
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
@@ -142,7 +143,7 @@ fun MinidlnaContent() {
             MainTopBar()
         },
         bottomBar = {
-            MainBottomBar()
+            MainBottomBar(ramUsage)
         }
     )
 }

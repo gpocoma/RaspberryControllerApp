@@ -39,7 +39,7 @@ fun SystemInfoCard(modifier: Modifier = Modifier) {
 
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .fillMaxWidth()
             .then(modifier),
         colors = CardDefaults.cardColors(

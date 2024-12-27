@@ -24,11 +24,10 @@ import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import kotlinx.coroutines.delay
 
 @Composable
-fun MainBottomBar() {
+fun MainBottomBar(ramUsage: RAMUsage?) {
     val controller = RaspberryPiController()
     val currentCPUUsage = remember { mutableStateOf(0.0) }
-    val currentRAMUsage = remember { mutableStateOf(0.0) }
-    val updateInterval = 4000L // Intervalo de actualización en milisegundos (4 segundos)
+    val updateInterval = 4000L
 
     LaunchedEffect(key1 = currentCPUUsage) {
         while (true) {
@@ -41,17 +40,6 @@ fun MainBottomBar() {
                     currentCPUUsage.value = 0.0
                 }
             })
-
-            controller.fetchRAMUsage(object : RAMUsageCallback {
-                override fun onSuccess(ramUsage: RAMUsage) {
-                    currentRAMUsage.value = ramUsage.usedPercent
-                }
-
-                override fun onError(message: String) {
-                    currentRAMUsage.value = 0.0
-                }
-            })
-
             delay(updateInterval)
         }
     }
@@ -60,16 +48,14 @@ fun MainBottomBar() {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colorScheme.tertiary)
-            .navigationBarsPadding()
-        ,
+            .navigationBarsPadding(),
         contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .heightIn(24.dp)
-            ,
+                .heightIn(24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -81,7 +67,7 @@ fun MainBottomBar() {
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = "RAM: ${String.format("%.4f", currentRAMUsage.value)} %",
+                text = "RAM: ${String.format("%.4f", ramUsage?.usedPercent)} %",
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .weight(1f)

@@ -29,12 +29,13 @@ import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
 import com.galopocoma.raspberrycontrollerapp.controllers.StartTransmissionCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.StopTransmissionCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallback
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.StartTransmission
 import com.galopocoma.raspberrycontrollerapp.models.StopTransmission
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 
 @Composable
-fun TransmissionContent() {
+fun TransmissionContent(ramUsage: RAMUsage?) {
     val showDialog = remember { mutableStateOf(false) }
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
@@ -59,7 +60,7 @@ fun TransmissionContent() {
             MainTopBar()
         },
         bottomBar = {
-            MainBottomBar()
+            MainBottomBar(ramUsage)
         },
         content = { paddingValues ->
             Box(

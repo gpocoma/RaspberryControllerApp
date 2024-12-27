@@ -13,10 +13,11 @@ import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
 import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallback
 import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 
 @Composable
-fun DefaultMainScreen() {
+fun DefaultMainScreen(ramUsage: RAMUsage?) {
     val controller = RaspberryPiController()
     val minidlna = remember { mutableStateOf(false) }
     val transmission = remember { mutableStateOf(false) }
@@ -59,7 +60,7 @@ fun DefaultMainScreen() {
             MainTopBar()
         },
         bottomBar = {
-            MainBottomBar()
+            MainBottomBar(ramUsage)
         }
     )
 }

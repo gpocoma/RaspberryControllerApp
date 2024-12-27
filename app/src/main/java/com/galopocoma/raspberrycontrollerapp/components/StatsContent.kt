@@ -16,10 +16,11 @@ import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
 import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallback
 import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
 
 @Composable
-fun StatsContent() {
+fun StatsContent(ramUsage: RAMUsage?) {
     val controller = remember { RaspberryPiController() }
     val minidlna = remember { mutableStateOf(false) }
     val transmission = remember { mutableStateOf(false) }
@@ -47,7 +48,7 @@ fun StatsContent() {
 
     Scaffold(
         topBar = { MainTopBar() },
-        bottomBar = { MainBottomBar() },
+        bottomBar = { MainBottomBar(ramUsage) },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -61,6 +62,11 @@ fun StatsContent() {
                     Column(modifier = Modifier.weight(1f)) {
                         StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
                     }
+                }
+                ramUsage?.let {
+                    RamUsageCard(it)
+                } ?: run {
+                    RamUsageCard(RAMUsage(0.0, 0.0, 0.0, 0.0))
                 }
                 SystemInfoCard()
             }
