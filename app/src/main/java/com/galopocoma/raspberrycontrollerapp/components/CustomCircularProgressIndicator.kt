@@ -1,16 +1,16 @@
 package com.galopocoma.raspberrycontrollerapp.components
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
@@ -47,7 +47,7 @@ fun CustomCircularProgressIndicator(modifier: Modifier = Modifier) {
     val color by infiniteTransition.animateColor(
         label = "color",
         initialValue = MaterialTheme.colorScheme.primary,
-        targetValue = MaterialTheme.colorScheme.secondary,
+        targetValue = MaterialTheme.colorScheme.surface,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1500, easing = LinearEasing),
             repeatMode = RepeatMode.Restart

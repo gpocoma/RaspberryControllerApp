@@ -139,7 +139,7 @@ fun MainTopBar() {
                                 Text(
                                     text = "Apagar Raspberry",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onTertiary
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             },
                             modifier = Modifier.background(color = MaterialTheme.colorScheme.tertiary),
