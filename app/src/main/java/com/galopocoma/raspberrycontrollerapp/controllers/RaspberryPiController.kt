@@ -14,6 +14,11 @@ import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
 
+import com.galopocoma.raspberrycontrollerapp.models.PostgreSQLStatus
+import com.galopocoma.raspberrycontrollerapp.models.StartPostgreSQL
+import com.galopocoma.raspberrycontrollerapp.models.StopPostgreSQL
+
+
 import com.galopocoma.raspberrycontrollerapp.services.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -71,6 +76,21 @@ interface SystemShutdownCallback {
 
 interface SystemInfoCallback {
     fun onSuccess(systemInfo: SystemInfo)
+    fun onError(message: String)
+}
+
+interface PostgreSQLStatusCallback {
+    fun onSuccess(postgreSQLStatus: PostgreSQLStatus?)
+    fun onError(message: String)
+}
+
+interface StartPostgreSQLCallback {
+    fun onSuccess(startPostgreSQL: StartPostgreSQL?)
+    fun onError(message: String)
+}
+
+interface StopPostgreSQLCallback {
+    fun onSuccess(stopPostgreSQL: StopPostgreSQL?)
     fun onError(message: String)
 }
 
@@ -269,6 +289,60 @@ class RaspberryPiController {
             }
 
             override fun onFailure(call: Call<StopMinidlna>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchPostgreSQLStatus(callback: PostgreSQLStatusCallback) {
+        val call = RetrofitClient.api.getPostgreSQLStatus()
+        call.enqueue(object : Callback<PostgreSQLStatus> {
+            override fun onResponse(call: Call<PostgreSQLStatus>, response: Response<PostgreSQLStatus>) {
+                if (response.isSuccessful) {
+                    val serviceStatus = response.body()
+                    callback.onSuccess(serviceStatus)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<PostgreSQLStatus>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun startPostgreSQL(callback: StartPostgreSQLCallback) {
+        val call = RetrofitClient.api.startPostgreSQL()
+        call.enqueue(object : Callback<StartPostgreSQL> {
+            override fun onResponse(call: Call<StartPostgreSQL>, response: Response<StartPostgreSQL>) {
+                if (response.isSuccessful) {
+                    val serviceStatus = response.body()
+                    callback.onSuccess(serviceStatus)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StartPostgreSQL>, t: Throwable) {
+                callback.onError("Failure: ${t.message}")
+            }
+        })
+    }
+
+    fun stopPostgreSQL(callback: StopPostgreSQLCallback) {
+        val call = RetrofitClient.api.stopPostgreSQL()
+        call.enqueue(object : Callback<StopPostgreSQL> {
+            override fun onResponse(call: Call<StopPostgreSQL>, response: Response<StopPostgreSQL>) {
+                if (response.isSuccessful) {
+                    val serviceStatus = response.body()
+                    callback.onSuccess(serviceStatus)
+                } else {
+                    callback.onError("Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StopPostgreSQL>, t: Throwable) {
                 callback.onError("Failure: ${t.message}")
             }
         })

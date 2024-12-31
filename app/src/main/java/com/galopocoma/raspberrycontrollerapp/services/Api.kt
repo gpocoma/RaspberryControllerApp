@@ -8,7 +8,10 @@ import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
 import com.galopocoma.raspberrycontrollerapp.models.CPUUsage
+import com.galopocoma.raspberrycontrollerapp.models.PostgreSQLStatus
 import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
+import com.galopocoma.raspberrycontrollerapp.models.StartPostgreSQL
+import com.galopocoma.raspberrycontrollerapp.models.StopPostgreSQL
 import com.galopocoma.raspberrycontrollerapp.models.SystemShutdown
 import com.galopocoma.raspberrycontrollerapp.models.SystemInfo
 import retrofit2.Call
@@ -50,6 +53,15 @@ interface RaspberryPiApi {
 
     @POST("minidlna/stop")
     fun stopMinidlna(): Call<StopMinidlna>
+
+    @GET("postgresql/")
+    fun getPostgreSQLStatus(): Call<PostgreSQLStatus>
+
+    @POST("postgresql/start")
+    fun startPostgreSQL(): Call<StartPostgreSQL>
+
+    @POST("postgresql/stop")
+    fun stopPostgreSQL(): Call<StopPostgreSQL>
 }
 
 object RetrofitClient {

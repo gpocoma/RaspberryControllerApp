@@ -28,6 +28,18 @@ data class StopMinidlna(
     val message: String
     )
 
+data class PostgreSQLStatus(
+    val active: Boolean
+    )
+
+data class StartPostgreSQL(
+    val message: String
+    )
+
+data class StopPostgreSQL(
+    val message: String
+    )
+
 data class CPUUsage(
     val cpuUsagePercent: Double
     )

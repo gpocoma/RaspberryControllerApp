@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.galopocoma.raspberrycontrollerapp.components.MinidlnaContent
+import com.galopocoma.raspberrycontrollerapp.components.PostgreSQLContent
 import com.galopocoma.raspberrycontrollerapp.components.StatsContent
 import com.galopocoma.raspberrycontrollerapp.components.TransmissionContent
 import com.galopocoma.raspberrycontrollerapp.controllers.RAMUsageCallback
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 enum class Screen {
-    Stats, Transmission, Minidlna
+    Stats, Transmission, Minidlna, PostgreSQL
 }
 
 
@@ -120,12 +121,23 @@ fun MainContent() {
                         },
                         shape = RoundedCornerShape(4.dp)
                     )
+                    NavigationDrawerItem(
+                        label = { Text("PostgreSQL") },
+                        selected = selectedScreen.value == Screen.PostgreSQL,
+                        onClick = {
+                            selectedScreen.value = Screen.PostgreSQL
+                            scope.launch { drawerState.close() }
+                        },
+                        shape = RoundedCornerShape(4.dp)
+                    )
                 }
             }) {
             when (selectedScreen.value) {
                 Screen.Stats -> StatsContent(ramUsage = ram.value)
                 Screen.Transmission -> TransmissionContent(ramUsage = ram.value)
                 Screen.Minidlna -> MinidlnaContent(ramUsage = ram.value)
+                Screen.PostgreSQL -> PostgreSQLContent(ramUsage = ram.value)
+
             }
         }
     }

@@ -24,17 +24,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
-import com.galopocoma.raspberrycontrollerapp.controllers.StartMinidlnaCallback
-import com.galopocoma.raspberrycontrollerapp.controllers.StopMinidlnaCallback
-import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.controllers.PostgreSQLStatusCallback
+import com.galopocoma.raspberrycontrollerapp.controllers.StartPostgreSQLCallback
+import com.galopocoma.raspberrycontrollerapp.controllers.StopPostgreSQLCallback
+import com.galopocoma.raspberrycontrollerapp.models.PostgreSQLStatus
+import com.galopocoma.raspberrycontrollerapp.models.StopPostgreSQL
 import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
-import com.galopocoma.raspberrycontrollerapp.models.StartMinidlna
-import com.galopocoma.raspberrycontrollerapp.models.StopMinidlna
+import com.galopocoma.raspberrycontrollerapp.models.StartPostgreSQL
 
 @Composable
-fun MinidlnaContent(ramUsage: RAMUsage?) {
+fun PostgreSQLContent(ramUsage: RAMUsage?) {
     val showDialog = remember { mutableStateOf(false) }
     val showModal = remember { mutableStateOf(false) }
     val dialogMessage = remember { mutableStateOf("") }
@@ -65,12 +65,12 @@ fun MinidlnaContent(ramUsage: RAMUsage?) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CardButton(
-                        text = "Status Minidlna",
+                        text = "Status PostgreSQL",
                         onClick = {
                             showModal.value = true
-                            controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
-                                override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
-                                    dialogMessage.value = if (minidlnaStatus?.active == true) {
+                            controller.fetchPostgreSQLStatus(object : PostgreSQLStatusCallback {
+                                override fun onSuccess(postgreSQLStatus: PostgreSQLStatus?) {
+                                    dialogMessage.value = if (postgreSQLStatus?.active == true) {
                                         "Servicio en ejecución"
                                     } else {
                                         "Servicio detenido"
@@ -80,7 +80,7 @@ fun MinidlnaContent(ramUsage: RAMUsage?) {
                                 }
 
                                 override fun onError(message: String) {
-                                    Log.e("Minidlna", "Error: $message")
+                                    Log.e("PostgreSQL", "Error: $message")
                                     showModal.value = false
                                 }
                             })
@@ -88,19 +88,19 @@ fun MinidlnaContent(ramUsage: RAMUsage?) {
                         icon = Icons.Default.Refresh
                     )
                     CardButton(
-                        text = "Iniciar Minidlna",
+                        text = "Iniciar PostgreSQL",
                         onClick = {
                             showModal.value = true
-                            controller.startMinidlna(object : StartMinidlnaCallback {
-                                override fun onSuccess(startMinidlna: StartMinidlna?) {
+                            controller.startPostgreSQL(object : StartPostgreSQLCallback {
+                                override fun onSuccess(startPostgreSQL: StartPostgreSQL?) {
                                     dialogMessage.value =
-                                        startMinidlna?.message ?: "Error al iniciar el servicio"
+                                        startPostgreSQL?.message ?: "Error al iniciar el servicio"
                                     showDialog.value = true
                                     showModal.value = false
                                 }
 
                                 override fun onError(message: String) {
-                                    Log.e("Minidlna", "Error: $message")
+                                    Log.e("PostgreSQL", "Error: $message")
                                     showModal.value = false
                                 }
                             })
@@ -108,20 +108,20 @@ fun MinidlnaContent(ramUsage: RAMUsage?) {
                         icon = Icons.Default.PlayArrow
                     )
                     CardButton(
-                        text = "Detener Minidlna",
+                        text = "Detener PostgreSQL",
                         onClick = {
                             showModal.value = true
-                            controller.stopMinidlna(object : StopMinidlnaCallback {
-                                override fun onSuccess(stopMinidlna: StopMinidlna?) {
+                            controller.stopPostgreSQL(object : StopPostgreSQLCallback {
+                                override fun onSuccess(stopPostgreSQL: StopPostgreSQL?) {
                                     dialogMessage.value =
-                                        stopMinidlna?.message ?: "Error al detener el servicio"
+                                        stopPostgreSQL?.message ?: "Error al detener el servicio"
                                     showDialog.value = true
                                     showModal.value = false
                                 }
 
                                 override fun onError(message: String) {
-                                    Log.e("Minidlna", "Error: $message")
-                                    showModal.value = true
+                                    Log.e("PostgreSQL", "Error: $message")
+                                    showModal.value = false
                                 }
                             })
                         },
@@ -146,4 +146,3 @@ fun MinidlnaContent(ramUsage: RAMUsage?) {
         }
     )
 }
-

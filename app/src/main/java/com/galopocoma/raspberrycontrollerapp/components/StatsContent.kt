@@ -12,23 +12,27 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.RaspberryPiController
+import com.galopocoma.raspberrycontrollerapp.controllers.MinidlnaStatusCallback
 import com.galopocoma.raspberrycontrollerapp.controllers.TransmissionStatusCallback
-import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
+import com.galopocoma.raspberrycontrollerapp.controllers.PostgreSQLStatusCallback
 import com.galopocoma.raspberrycontrollerapp.models.RAMUsage
+import com.galopocoma.raspberrycontrollerapp.models.MinidlnaStatus
 import com.galopocoma.raspberrycontrollerapp.models.TransmissionStatus
+import com.galopocoma.raspberrycontrollerapp.models.PostgreSQLStatus
+
 
 @Composable
 fun StatsContent(ramUsage: RAMUsage?) {
     val controller = remember { RaspberryPiController() }
     val minidlna = remember { mutableStateOf(false) }
     val transmission = remember { mutableStateOf(false) }
+    val postgresql = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         controller.fetchMinidlnaStatus(object : MinidlnaStatusCallback {
-            override fun onSuccess(serviceStatus: MinidlnaStatus?) {
-                minidlna.value = serviceStatus?.active ?: false
+            override fun onSuccess(minidlnaStatus: MinidlnaStatus?) {
+                minidlna.value = minidlnaStatus?.active ?: false
             }
 
             override fun onError(message: String) {
@@ -36,12 +40,21 @@ fun StatsContent(ramUsage: RAMUsage?) {
             }
         })
         controller.fetchTransmissionStatus(object : TransmissionStatusCallback {
-            override fun onSuccess(serviceStatus: TransmissionStatus?) {
-                transmission.value = serviceStatus?.active ?: false
+            override fun onSuccess(transmissionStatus: TransmissionStatus?) {
+                transmission.value = transmissionStatus?.active ?: false
             }
 
             override fun onError(message: String) {
                 transmission.value = false
+            }
+        })
+        controller.fetchPostgreSQLStatus(object : PostgreSQLStatusCallback {
+            override fun onSuccess(postgreSQLStatus: PostgreSQLStatus?) {
+                postgresql.value = postgreSQLStatus?.active ?: false
+            }
+
+            override fun onError(message: String) {
+                postgresql.value = false
             }
         })
     }
@@ -61,6 +74,11 @@ fun StatsContent(ramUsage: RAMUsage?) {
                     }
                     Column(modifier = Modifier.weight(1f)) {
                         StatusCard(serviceName = "Minidlna", isRunning = minidlna.value)
+                    }
+                }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        StatusCard(serviceName = "PostgreSQL", isRunning = postgresql.value)
                     }
                 }
                 ramUsage?.let {
